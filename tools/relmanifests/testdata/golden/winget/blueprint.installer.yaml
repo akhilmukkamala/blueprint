@@ -12,7 +12,7 @@ Commands:
   - blueprint
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/akhilmukkamala/blueprint/releases/download/v1.2.3/blueprint-1.2.3-windows-amd64.zip
+    InstallerUrl: https://github.com/AkhilMukkamala/blueprint/releases/download/v1.2.3/blueprint-1.2.3-windows-amd64.zip
     InstallerSha256: 5555555555555555555555555555555555555555555555555555555555555555
 ManifestType: installer
 ManifestVersion: 1.6.0

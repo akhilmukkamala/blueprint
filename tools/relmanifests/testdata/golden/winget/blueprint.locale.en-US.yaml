@@ -6,7 +6,7 @@ PackageVersion: 1.2.3
 PackageLocale: en-US
 Publisher: Akhil Mukkamala
 PackageName: Blueprint
-PackageUrl: https://github.com/akhilmukkamala/blueprint
+PackageUrl: https://github.com/AkhilMukkamala/blueprint
 License: See LICENSES.md (finalized at first publish)
 ShortDescription: Spec-driven development engine — specs as verifiers, worklogs, autonomy.
 Moniker: blueprint

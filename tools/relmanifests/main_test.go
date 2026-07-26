@@ -27,7 +27,7 @@ func TestGeneratorGolden(t *testing.T) {
 	opts := options{
 		ChecksumsPath: filepath.Join("testdata", "checksums.txt"),
 		Version:       "1.2.3",
-		Repo:          "akhilmukkamala/blueprint",
+		Repo:          "AkhilMukkamala/blueprint",
 		WingetID:      "AkhilMukkamala.Blueprint",
 		Publisher:     "Akhil Mukkamala",
 		TemplatesDir:  filepath.Join(root, "dist"),
@@ -81,7 +81,7 @@ func TestGeneratorOutputsHaveNoPlaceholders(t *testing.T) {
 	opts := options{
 		ChecksumsPath: filepath.Join("testdata", "checksums.txt"),
 		Version:       "1.2.3",
-		Repo:          "akhilmukkamala/blueprint",
+		Repo:          "AkhilMukkamala/blueprint",
 		WingetID:      "AkhilMukkamala.Blueprint",
 		Publisher:     "Akhil Mukkamala",
 		TemplatesDir:  filepath.Join(root, "dist"),
@@ -113,7 +113,7 @@ func TestGeneratorRejectsWrongVersion(t *testing.T) {
 	opts := options{
 		ChecksumsPath: filepath.Join("testdata", "checksums.txt"),
 		Version:       "9.9.9", // fixture is 1.2.3
-		Repo:          "akhilmukkamala/blueprint",
+		Repo:          "AkhilMukkamala/blueprint",
 		WingetID:      "AkhilMukkamala.Blueprint",
 		Publisher:     "Akhil Mukkamala",
 		TemplatesDir:  filepath.Join(root, "dist"),

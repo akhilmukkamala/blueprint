@@ -15,7 +15,7 @@
 $ErrorActionPreference = 'Stop'
 
 # Repo slug is finalized at first publish; until then override with GITHUB_REPO.
-$Repo = if ($env:GITHUB_REPO) { $env:GITHUB_REPO } else { 'akhilmukkamala/blueprint' }
+$Repo = if ($env:GITHUB_REPO) { $env:GITHUB_REPO } else { 'AkhilMukkamala/blueprint' }
 $Version = if ($env:BLUEPRINT_VERSION) { $env:BLUEPRINT_VERSION } else { 'latest' }
 
 $Arch = if ([Environment]::Is64BitOperatingSystem) { 'amd64' } else {
