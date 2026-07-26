@@ -17,7 +17,7 @@
 set -eu
 
 # Repo slug is finalized at first publish; until then override with GITHUB_REPO.
-GITHUB_REPO="${GITHUB_REPO:-AkhilMukkamala/blueprint}"
+GITHUB_REPO="${GITHUB_REPO:-akhilmukkamala/blueprint}"
 VERSION="${BLUEPRINT_VERSION:-latest}"
 
 say() { printf '%s\n' "$*"; }
