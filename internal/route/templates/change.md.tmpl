@@ -1,0 +1,48 @@
++++
+id = "{{.ID}}"
+title = "{{.Title}}"
+type = "{{.Type}}"
+tier = "{{.Tier}}"
+status = "{{.Status}}"
+scenario = "{{.Scenario}}"
+{{- if .SLAString}}
+sla = "{{.SLAString}}"  # Sev-1 backfill deadline (72h)
+{{- end}}
+
+[loop]
+predicate = "{{.Contract.Predicate}}"
+max_iterations = {{.Contract.MaxIterations}}
+max_minutes = {{.Contract.MaxMinutes}}
+max_usd = {{.Contract.MaxUSD}}
+
+[loop.breaker]
+repeat_action_n = {{.Contract.Breaker.RepeatActionN}}
+repeat_error_n = {{.Contract.Breaker.RepeatErrorN}}
+no_diff_delta_n = {{.Contract.Breaker.NoDiffDeltaN}}
+oscillation_n = {{.Contract.Breaker.OscillationN}}
+monologue_tokens = {{.Contract.Breaker.MonologueTokens}}
+
+[loop.boundaries]
+writable = [{{range $i, $p := .Contract.Writable}}{{if $i}}, {{end}}"{{$p}}"{{end}}]
+readonly = [{{range $i, $p := .Contract.ReadOnly}}{{if $i}}, {{end}}"{{$p}}"{{end}}]
++++
+
+# {{.Title}}
+
+## Delta
+
+<!-- EARS deltas against living specs. 1–3 for light tier. Format:
+### ADDED REQ-<area>-NNN
+When <trigger>, the <system> shall <response>.
+verify: test:<id>
+-->
+
+## Tasks
+
+- [ ] T1: <!-- first concrete task; no placeholders — `blueprint lint spec` bans "TBD" -->
+{{if .Full}}
+## Design
+
+<!-- Full tier requires a Design section: approach, boundaries touched,
+alternatives considered. Harvested into specs/<area>/design.md on close. -->
+{{end}}

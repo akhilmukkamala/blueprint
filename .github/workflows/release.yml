@@ -1,0 +1,120 @@
+# Release pipeline (DESIGN §11): on a v* tag, build the blueprint binary
+# natively on every supported platform (cgo — tree-sitter — so never
+# GOOS-cross; each target gets its own native runner), assemble the offline
+# artifact per platform, and aggregate everything into one GitHub Release.
+#
+# CONTRACTS: only actions/checkout and actions/setup-go, SHA-pinned (same pins
+# as ci.yml). Release plumbing uses the preinstalled `gh` CLI — no third-party
+# release action.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  # The draft release exists before any build finishes, so matrix jobs can
+  # `gh release upload` directly; the publish job undrafts at the end.
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release create "${GITHUB_REF_NAME}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --draft \
+              --title "blueprint ${GITHUB_REF_NAME}" \
+              --notes "Blueprint ${GITHUB_REF_NAME}. Verify downloads against checksums.txt; install instructions ship inside each offline artifact (INSTALL.md)."
+          fi
+
+  build:
+    needs: create-release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Native runners only: cgo (tree-sitter) forbids GOOS-cross builds.
+          - { runner: ubuntu-latest,    goos: linux,   goarch: amd64 }
+          - { runner: ubuntu-24.04-arm, goos: linux,   goarch: arm64 }
+          - { runner: macos-latest,     goos: darwin,  goarch: arm64 }
+          - { runner: macos-15-intel,   goos: darwin,  goarch: amd64 }
+          - { runner: windows-latest,   goos: windows, goarch: amd64 }
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with: { go-version-file: go.mod }
+
+      - name: Build (native, version-stamped)
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          EXT=""
+          [ "${{ matrix.goos }}" = "windows" ] && EXT=".exe"
+          go build -trimpath -ldflags "-s -w -X main.version=${TAG}" -o "blueprint${EXT}" ./cmd/blueprint
+          "./blueprint${EXT}" version --json
+
+      - name: Assemble offline artifact + checksum
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VER="${TAG#v}"
+          NAME="blueprint-offline-${VER}-${{ matrix.goos }}-${{ matrix.goarch }}"
+          EXT=""
+          [ "${{ matrix.goos }}" = "windows" ] && EXT=".exe"
+          mkdir -p "stage/${NAME}/docs"
+          cp "blueprint${EXT}" INSTALL.md README.md LICENSE licenses.lock "stage/${NAME}/"
+          cp docs/THIRD_PARTY.md "stage/${NAME}/docs/"
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            ARTIFACT="${NAME}.zip"
+            (cd stage && 7z a -tzip "../${ARTIFACT}" "${NAME}" >/dev/null)
+          else
+            ARTIFACT="${NAME}.tar.gz"
+            tar -C stage -czf "${ARTIFACT}" "${NAME}"
+          fi
+          if command -v sha256sum >/dev/null 2>&1; then
+            sha256sum "${ARTIFACT}" > "${ARTIFACT}.sha256"
+          else
+            shasum -a 256 "${ARTIFACT}" > "${ARTIFACT}.sha256"
+          fi
+          cat "${ARTIFACT}.sha256"
+          echo "ARTIFACT=${ARTIFACT}" >> "${GITHUB_ENV}"
+
+      - name: Upload artifact to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --clobber \
+            "${ARTIFACT}" "${ARTIFACT}.sha256"
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Aggregate checksums and publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p dl
+          gh release download "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --pattern "*.sha256" --dir dl
+          cat dl/*.sha256 | sort -k2 > checksums.txt
+          cat checksums.txt
+          gh release upload "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --clobber checksums.txt
+          gh release edit "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --draft=false

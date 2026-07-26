@@ -1,0 +1,64 @@
+# .blueprint/safety.toml — safety envelope, compiled to native enforcement
+# per tool and CI. Ownership: [user]. Tooling never edits this file.
+
+[safety]
+# Globs whose touch escalates routing to full ceremony. Keep the maker-written
+# denylist entries; add your auth / payments / migrations / infra paths.
+sensitive = [
+  ".env*",
+  "**/secrets/**",
+  "**/*.pem",
+  "**/*.key",
+  ".github/workflows/**",
+  ".git/hooks/**",
+  # "src/auth/**",
+  # "src/billing/**",
+]
+
+# One-way (hard-to-reverse) classes bump the ceremony tier one step.
+[[reversibility]]
+class = "schema"
+globs = ["migrations/**", "**/schema.sql"]
+one_way = true
+
+# [[reversibility]]
+# class = "public-api"
+# globs = ["api/openapi.yml"]
+# one_way = true
+
+[deny]
+# Maker write-denylist (DESIGN §13), compiled by `blueprint sync` into
+# .claude/settings.json permission deny rules (Write/Edit). Codex/Cursor
+# equivalents land with the packaging phase; the hash-based tamper layer in
+# `blueprint verify` is the universal backstop on every host meanwhile.
+write = [
+  ".env*",
+  "**/secrets/**",
+  "**/*.pem",
+  "**/*.key",
+  ".github/workflows/**",
+  ".git/hooks/**",
+  ".claude/settings.json",
+  ".blueprint/specs/**",
+  ".blueprint/safety.toml",
+  ".blueprint/autonomy.json",
+]
+
+[gates]
+# Tier-independent human gates: never automated, at any autonomy level.
+human = [
+  "prod-deploy",
+  "db-migration-execute",
+  "money-or-authz-path",
+  "data-deletion",
+  "loc-over-400",            # rendered as a split-this-change prompt
+  "registry-expansion",
+  "autonomy-promotion",
+  "dream-merge",
+  "approve-amend",
+]
+
+[branch]
+# All unattended agent writes stay inside this namespace; `main` is
+# untouchable by loops at any level.
+namespace = "agent/**"

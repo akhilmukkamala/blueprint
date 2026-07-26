@@ -1,0 +1,18 @@
+# winget default-locale-manifest TEMPLATE. Placeholders are filled by
+# tools/relmanifests from a release checksums file; do not hand-edit generated copies.
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
+PackageIdentifier: {{WINGET_ID}}
+PackageVersion: {{VERSION}}
+PackageLocale: en-US
+Publisher: {{PUBLISHER}}
+PackageName: Blueprint
+PackageUrl: https://github.com/{{REPO}}
+License: See LICENSES.md (finalized at first publish)
+ShortDescription: Spec-driven development engine — specs as verifiers, worklogs, autonomy.
+Moniker: blueprint
+Tags:
+  - cli
+  - developer-tools
+  - spec-driven-development
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0

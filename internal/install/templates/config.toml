@@ -1,0 +1,37 @@
+# .blueprint/config.toml — engine configuration.
+# Ownership: [mixed]. The managed region below is replaced by `blueprint
+# upgrade`; anything you add OUTSIDE the region is yours and is never touched.
+
+# blueprint:managed
+[router]
+escalate_loc = 400                  # light -> full changed-LOC threshold
+escalate_on_sensitive_touch = true  # sensitive-path escalation is absolute
+
+[lint]
+# banned_words = ["fast", "user-friendly", "robust"]  # extra vague words (INCOSE-R7/NASA-ARM)
+# human_verify_budget = 5                             # max `verify: human` escape hatches across living specs (default 5)
+
+# [checker]                # opt-in model-graded checker hook (network, AC-12)
+# command = ""             # executable reading the JSON packet on stdin
+# max_usd = 2.0            # per-run spend cap
+
+# [test]                   # repo test command, expanded into {{TEST_CMD}} in
+# command = ""             # verifiers.toml; empty/absent = auto-detect from
+#                          # package.json (npm test), go.mod (go test ./...),
+#                          # pyproject.toml/pytest.ini (pytest), Cargo.toml
+#                          # (cargo test), Makefile test target (make test).
+#                          # Set it below the managed region to override.
+
+# [retrieval]              # scaled retrieval (DESIGN §9); empty/absent = Tier 0/1 only
+# tier2_packing = ""       # "repomix": `blueprint sync` wires its MCP server (npx) into tool configs
+# tier2_lsp = ""           # "serena": likewise via uvx
+# [retrieval.graph]        # Tier 3: external MCP stdio graph backend,
+# command = ""             # spawned per call by `blueprint mcp serve` (30s timeout)
+#                          # `blueprint doctor` verifies configured binaries exist.
+
+[endpoint]
+posture = "cloud"          # cloud | enclave | local; verification tightens as posture degrades
+# model = ""               # pinned model ID — mandatory outside "cloud"
+# /blueprint:managed
+
+# Your overrides and additions go below this line.

@@ -1,0 +1,18 @@
+# winget installer-manifest TEMPLATE. Placeholders are filled by tools/relmanifests
+# from a release checksums file; do not hand-edit generated copies.
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.6.0.schema.json
+PackageIdentifier: AkhilMukkamala.Blueprint
+PackageVersion: 1.2.3
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+  - RelativeFilePath: blueprint.exe
+    PortableCommandAlias: blueprint
+Commands:
+  - blueprint
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/akhilmukkamala/blueprint/releases/download/v1.2.3/blueprint-1.2.3-windows-amd64.zip
+    InstallerSha256: 5555555555555555555555555555555555555555555555555555555555555555
+ManifestType: installer
+ManifestVersion: 1.6.0

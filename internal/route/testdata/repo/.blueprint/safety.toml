@@ -1,0 +1,13 @@
+# Fixture: sensitive paths + reversibility classes.
+[safety]
+sensitive = ["auth/**", "**/payments/**", "infra/prod/**"]
+
+[[reversibility]]
+class = "schema"
+globs = ["migrations/**", "**/*.sql"]
+one_way = true
+
+[[reversibility]]
+class = "feature-flags"
+globs = ["flags/**"]
+one_way = false

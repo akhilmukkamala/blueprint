@@ -1,0 +1,27 @@
+{
+    "##": "Scoop manifest TEMPLATE for the blueprint bucket. Placeholders are filled by tools/relmanifests from a release checksums file; do not hand-edit generated copies. Repo slug finalized at first publish.",
+    "version": "{{VERSION}}",
+    "description": "Spec-driven development engine: specs as verifiers, worklogs, autonomy",
+    "homepage": "https://github.com/{{REPO}}",
+    "license": "See LICENSES.md (finalized at first publish)",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/{{REPO}}/releases/download/v{{VERSION}}/blueprint-{{VERSION}}-windows-amd64.zip",
+            "hash": "{{SHA256_WINDOWS_AMD64}}"
+        }
+    },
+    "bin": "blueprint.exe",
+    "checkver": {
+        "github": "https://github.com/{{REPO}}"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/{{REPO}}/releases/download/v$version/blueprint-$version-windows-amd64.zip"
+            }
+        },
+        "hash": {
+            "url": "https://github.com/{{REPO}}/releases/download/v$version/checksums.txt"
+        }
+    }
+}

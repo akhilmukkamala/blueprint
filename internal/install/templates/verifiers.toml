@@ -1,0 +1,83 @@
+# .blueprint/verifiers.toml — domain verifier plug-ins (bundled pack).
+# Ownership: [user]. Tooling never edits this file after it lands — every
+# entry below is an editable default, not policy.
+#
+# One shape, every domain: command + repo-versioned config + exit code +
+# report file. Anything with an exit code plugs in — no SDK. Each verifier is
+# a [[verifier]] table (name, command, config_path, report_format, applies_to).
+# applies_to lists scenario classes: bug-fix, refactor, performance, chore,
+# feature, sev1-hotfix; "*" = every scenario; empty never auto-runs.
+#
+# {{TEST_CMD}} expands at run time to the repo test command:
+#   1. [test] command in .blueprint/config.toml, if set;
+#   2. else auto-detected — package.json test script (npm test), go.mod
+#      (go test ./...), pyproject.toml/pytest.ini (pytest), Cargo.toml
+#      (cargo test), Makefile test target (make test).
+# If neither resolves, the verifier FAILS with a remediation message — an
+# unknown test command is never a silent pass.
+
+# ── bug-fix / feature / chore: the whole suite must be green ─────────────────
+# Requirement tracing is already gated: `blueprint verify` runs spec lint and
+# trace lint as its first stage, so no [[verifier]] entry is needed for it.
+# For bug fixes, write the failing regression test FIRST (red), then fix until
+# this verifier is green — see .blueprint/skills/bug-fix/SKILL.md.
+[[verifier]]
+name = "tests-pass"
+command = "{{TEST_CMD}}"
+config_path = ".blueprint/config.toml"
+report_format = "text"
+applies_to = ["bug-fix", "feature", "chore"]
+
+# ── refactor: behavior preserved ─────────────────────────────────────────────
+# The pre-existing suite runs UNCHANGED — characterization tests pinned before
+# the refactor are the behavior contract (approved.lock hashes them; edits
+# after `blueprint approve` fail TAMPER).
+[[verifier]]
+name = "behavior-preserved"
+command = "{{TEST_CMD}}"
+config_path = ".blueprint/config.toml"
+report_format = "text"
+applies_to = ["refactor"]
+
+# Optional refactor tightener: require the touched lines to be covered.
+# Wiring: `pip install diff-cover`, produce coverage.xml with your runner
+# (e.g. `pytest --cov --cov-report=xml` or `go test -coverprofile` +
+# a converter), then uncomment:
+# [[verifier]]
+# name = "diff-cover"
+# command = "diff-cover coverage.xml --compare-branch main --fail-under 80"
+# config_path = ""
+# report_format = "text"
+# applies_to = ["refactor"]
+
+# ── performance: per-PR benchmark threshold gate ─────────────────────────────
+# Bundled example uses github-action-benchmark
+# (github.com/benchmark-action/github-action-benchmark). Exact wiring:
+#   1. CI step runs your benchmark and saves raw output, e.g.
+#        go test -bench=. -benchmem ./... | tee bench.txt
+#      (or benchmark.js / pytest-benchmark / cargo bench output).
+#   2. Add the action after it:
+#        - uses: benchmark-action/github-action-benchmark@v1
+#          with:
+#            tool: 'go'                    # go|benchmarkjs|pytest|cargo|...
+#            output-file-path: bench.txt
+#            alert-threshold: '130%'       # fail on >30% regression
+#            fail-on-alert: true
+#   3. To gate locally through `blueprint verify` too, point a verifier at a
+#      repo script that runs the benchmark and exits nonzero past the
+#      threshold, then uncomment:
+# [[verifier]]
+# name = "bench-threshold"
+# command = "scripts/bench-gate"
+# config_path = "scripts/bench-gate"
+# report_format = "text"
+# applies_to = ["performance"]
+
+# ── chore: linters green ─────────────────────────────────────────────────────
+# tests-pass above already covers chores; add your linter for a tighter gate:
+# [[verifier]]
+# name = "lint-clean"
+# command = "golangci-lint run"     # or: npx eslint .  |  ruff check .
+# config_path = ".golangci.yml"
+# report_format = "text"
+# applies_to = ["chore", "refactor"]

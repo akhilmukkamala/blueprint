@@ -1,0 +1,57 @@
+# .blueprint/registry.toml — standard-change registry.
+# Ownership: [user]. Tooling never edits this file. The classes below are
+# shipped DEFAULTS — edit, tighten, or delete them freely; they are yours the
+# moment this file lands.
+#
+# A change matching a class is pre-approved as exempt: it skips ceremony but
+# still runs the listed checks (verifier names from .blueprint/verifiers.toml).
+# Expanding this registry is a human-gated act (see safety.toml [gates]).
+#
+# Each class is a [[class]] table:
+#   name    — stable class name (the worklog records it)
+#   type    — Conventional-Commits change type; "" = any
+#   globs   — EVERY touched path must match one glob
+#   max_loc — exemption ceiling; larger diffs route normally (0 = no ceiling)
+#   checks  — verifier names that still run
+
+# Documentation-only edits: markdown anywhere, or anything under docs/.
+[[class]]
+name = "docs-only"
+type = "docs"
+globs = ["*.md", "**/*.md", "docs/**"]
+max_loc = 100
+checks = []
+
+# Pure formatting passes (gofmt / prettier / black output): any path, but the
+# type must be declared `style` and the diff must stay small enough to eyeball.
+[[class]]
+name = "formatting-only"
+type = "style"
+globs = ["**"]
+max_loc = 200
+checks = ["tests-pass"]
+
+# Patch-level dependency bumps: manifest + lockfile churn only. Lockfiles are
+# machine-generated and huge, so no LOC ceiling — the glob allowlist is the
+# guard, and the suite still has to pass.
+[[class]]
+name = "dep-patch-bump"
+type = "chore"
+globs = [
+  "package.json",
+  "package-lock.json",
+  "yarn.lock",
+  "pnpm-lock.yaml",
+  "go.mod",
+  "go.sum",
+  "Cargo.toml",
+  "Cargo.lock",
+  "pyproject.toml",
+  "poetry.lock",
+  "uv.lock",
+  "requirements*.txt",
+  "Gemfile",
+  "Gemfile.lock",
+]
+max_loc = 0
+checks = ["tests-pass"]

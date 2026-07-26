@@ -1,0 +1,5 @@
+# Fixture: router thresholds (DESIGN §4 defaults, radius tightened for tests).
+[router]
+escalate_loc = 400
+escalate_on_sensitive_touch = true
+escalate_radius = 10

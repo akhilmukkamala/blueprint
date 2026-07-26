@@ -1,0 +1,16 @@
+---
+id: calc
+status: approved
+owner: akhil
+reviewed: 2026-07-01
+---
+
+# calc — living spec
+
+REQ-calc-001 (event-driven): WHEN two operands are added, the system SHALL
+return their arithmetic sum.
+verify: test:TestAddCarries
+
+REQ-calc-002 (event-driven): WHEN one operand is subtracted from another, the
+system SHALL return their arithmetic difference.
+verify: test:TestSubBorrows

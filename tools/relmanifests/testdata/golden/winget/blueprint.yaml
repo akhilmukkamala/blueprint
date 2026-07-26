@@ -1,0 +1,9 @@
+# winget version-manifest TEMPLATE. Placeholders are filled by tools/relmanifests
+# from a release checksums file; do not hand-edit generated copies.
+# PackageIdentifier/publisher are finalized at first publish to winget-pkgs.
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.6.0.schema.json
+PackageIdentifier: AkhilMukkamala.Blueprint
+PackageVersion: 1.2.3
+DefaultLocale: en-US
+ManifestType: version
+ManifestVersion: 1.6.0

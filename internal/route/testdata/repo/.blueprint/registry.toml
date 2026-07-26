@@ -1,0 +1,14 @@
+# Fixture: pre-approved standard-change classes.
+[[class]]
+name = "docs-only"
+type = "docs"
+globs = ["**/*.md", "docs/**"]
+max_loc = 200
+checks = ["markdown-lint"]
+
+[[class]]
+name = "deps-patch"
+type = "chore"
+globs = ["go.sum", "package-lock.json"]
+max_loc = 1000
+checks = ["lockfile-audit"]
