@@ -53,7 +53,7 @@ func main() {
 	var opts options
 	flag.StringVar(&opts.ChecksumsPath, "checksums", "", "path to the release checksums.txt (required)")
 	flag.StringVar(&opts.Version, "version", "", "release version, e.g. 1.2.3 (required, no leading v)")
-	flag.StringVar(&opts.Repo, "repo", "AkhilMukkamala/blueprint", "GitHub owner/repo slug (finalized at first publish)")
+	flag.StringVar(&opts.Repo, "repo", "AkhilMukkamala/blueprint", "GitHub owner/repo slug")
 	flag.StringVar(&opts.WingetID, "winget-id", "AkhilMukkamala.Blueprint", "winget PackageIdentifier")
 	flag.StringVar(&opts.Publisher, "publisher", "Akhil Mukkamala", "winget Publisher")
 	flag.StringVar(&opts.TemplatesDir, "templates", "dist", "directory holding the manifest templates")

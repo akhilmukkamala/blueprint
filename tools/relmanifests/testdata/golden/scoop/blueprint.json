@@ -1,9 +1,9 @@
 {
-    "##": "Scoop manifest TEMPLATE for the blueprint bucket. Placeholders are filled by tools/relmanifests from a release checksums file; do not hand-edit generated copies. Repo slug finalized at first publish.",
+    "##": "Scoop manifest TEMPLATE for the blueprint bucket. Placeholders are filled by tools/relmanifests from a release checksums file; do not hand-edit generated copies.",
     "version": "1.2.3",
     "description": "Spec-driven development engine: specs as verifiers, worklogs, autonomy",
     "homepage": "https://github.com/AkhilMukkamala/blueprint",
-    "license": "See LICENSES.md (finalized at first publish)",
+    "license": "See LICENSES.md",
     "architecture": {
         "64bit": {
             "url": "https://github.com/AkhilMukkamala/blueprint/releases/download/v1.2.3/blueprint-1.2.3-windows-amd64.zip",

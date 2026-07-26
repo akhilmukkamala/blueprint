@@ -2,7 +2,7 @@
 # blueprint one-line installer (POSIX sh — no bashisms; runs under dash/ash/sh).
 #
 # Usage (documented use of curl|sh; read the script first if you prefer):
-#   curl -fsSL https://raw.githubusercontent.com/AkhilMukkamala/blueprint/main/dist/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/akhilmukkamala/blueprint/main/dist/install.sh | sh
 # or download it, inspect it, then run:  sh install.sh
 #
 # Environment overrides:
@@ -16,7 +16,6 @@
 # It is idempotent: re-running with the same version already installed is a no-op.
 set -eu
 
-# Repo slug is finalized at first publish; until then override with GITHUB_REPO.
 GITHUB_REPO="${GITHUB_REPO:-akhilmukkamala/blueprint}"
 VERSION="${BLUEPRINT_VERSION:-latest}"
 

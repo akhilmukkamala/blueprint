@@ -7,7 +7,7 @@ PackageLocale: en-US
 Publisher: Akhil Mukkamala
 PackageName: Blueprint
 PackageUrl: https://github.com/AkhilMukkamala/blueprint
-License: See LICENSES.md (finalized at first publish)
+License: See LICENSES.md
 ShortDescription: Spec-driven development engine — specs as verifiers, worklogs, autonomy.
 Moniker: blueprint
 Tags:

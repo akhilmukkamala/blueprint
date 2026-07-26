@@ -1,12 +1,11 @@
 # Homebrew formula for the blueprint tap (e.g. akhilmukkamala/homebrew-blueprint).
 # Template placeholders are filled by tools/relmanifests from a release
 # checksums file — do not hand-edit generated copies; regenerate instead.
-# The repo slug is finalized at first publish.
 class Blueprint < Formula
   desc "Spec-driven development engine: specs as verifiers, worklogs, autonomy"
   homepage "https://github.com/AkhilMukkamala/blueprint"
   version "1.2.3"
-  # License finalized at first publish (see LICENSES.md in the repo).
+  # See LICENSES.md in the repo.
 
   on_macos do
     if Hardware::CPU.arm?
