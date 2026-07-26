@@ -5,16 +5,12 @@ time for tree-sitter, so releases are built on native runners — see
 `dist/` for the release manifests). Every release publishes tarballs/zips, a
 `checksums.txt`, an SBOM, and provenance on GitHub Releases.
 
-> The GitHub repo slug (`AkhilMukkamala/blueprint` below) is finalized at first
-> publish; the install script and manifests read it from a variable so only one
-> place changes.
-
 ## Online install
 
 ### One-line script (macOS, Linux)
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/AkhilMukkamala/blueprint/main/dist/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/akhilmukkamala/blueprint/main/dist/install.sh | sh
 ```
 
 Prefer to inspect first? Download `dist/install.sh`, read it, then `sh install.sh`.
@@ -35,7 +31,7 @@ directory to your *user* PATH (no admin needed).
 ### Homebrew (macOS, Linux)
 
 ```sh
-brew tap AkhilMukkamala/blueprint
+brew tap akhilmukkamala/blueprint
 brew install blueprint
 ```
 

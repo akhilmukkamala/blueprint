@@ -10,7 +10,7 @@ playbook around this session is [ADOPT.md](ADOPT.md).
 macOS / Linux:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/AkhilMukkamala/blueprint/main/dist/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/akhilmukkamala/blueprint/main/dist/install.sh | sh
 ```
 
 Windows (PowerShell): `powershell -ExecutionPolicy Bypass -File install.ps1`
